@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>BlackJack Royal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ══════════ LOADER ══════════ -->
+<div id="loader">
+  <canvas id="particles-canvas"></canvas>
+  <div class="loader-inner">
+    <div class="loader-logo">
+      <div class="card-fan">
+        <div class="mini-card c1">♠</div>
+        <div class="mini-card c2">♥</div>
+        <div class="mini-card c3">♣</div>
+        <div class="mini-card c4">♦</div>
+      </div>
+      <h1 class="loader-title">BlackJack<br><span>Royal</span></h1>
+    </div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar" id="loader-bar"></div>
+      <div class="loader-bar-glow" id="loader-bar-glow"></div>
+    </div>
+    <p class="loader-text" id="loader-text">Тасуем колоду...</p>
+  </div>
+</div>
+
+<!-- ══════════ MAIN MENU ══════════ -->
+<div id="screen-menu" class="screen hidden">
+  <div class="menu-bg">
+    <div class="felt-texture"></div>
+    <div class="gold-border-top"></div>
+    <div class="gold-border-bottom"></div>
+    <div class="floating-suit s1">♠</div>
+    <div class="floating-suit s2">♥</div>
+    <div class="floating-suit s3">♦</div>
+    <div class="floating-suit s4">♣</div>
+    <div class="floating-suit s5">♠</div>
+    <div class="floating-suit s6">♥</div>
+  </div>
+  <div class="menu-content">
+    <div class="menu-header">
+      <div class="menu-avatar" id="menu-avatar">
+        <span id="menu-avatar-letter">?</span>
+      </div>
+      <div class="menu-user-info">
+        <h2 id="menu-username">Игрок</h2>
+        <p class="menu-coins">💰 <span id="menu-coins">1000</span> фишек</p>
+      </div>
+    </div>
+    <div class="logo-center">
+      <div class="logo-suits">♠ ♥ ♦ ♣</div>
+      <h1 class="main-logo">BlackJack<br><span>Royal</span></h1>
+      <p class="tagline">Испытай судьбу</p>
+    </div>
+    <div class="menu-buttons">
+      <button class="menu-btn btn-play" id="btn-play-main">
+        <div class="btn-shine"></div>
+        <span class="btn-icon">🃏</span>
+        <span class="btn-label">Найти игру</span>
+        <span class="btn-sub">1–6 игроков · Мультиплеер</span>
+      </button>
+      <div class="menu-row">
+        <button class="menu-btn btn-profile" onclick="openScreen('profile')">
+          <div class="btn-shine"></div>
+          <span class="btn-icon">👤</span>
+          <span class="btn-label">Профиль</span>
+        </button>
+        <button class="menu-btn btn-settings" onclick="openScreen('settings')">
+          <div class="btn-shine"></div>
+          <span class="btn-icon">⚙️</span>
+          <span class="btn-label">Настройки</span>
+        </button>
+      </div>
+    </div>
+    <div class="menu-footer">
+      <span class="suit-decor">♠ ♥ ♣ ♦</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PROFILE ══════════ -->
+<div id="screen-profile" class="screen hidden">
+  <div class="screen-header">
+    <button class="back-btn" onclick="openScreen('menu')">← Назад</button>
+    <h2>Профиль</h2>
+  </div>
+  <div class="profile-content">
+    <div class="profile-avatar-wrap">
+      <div class="profile-avatar-ring">
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="54"/>
+          <circle class="ring-prog" cx="60" cy="60" r="54" id="profile-ring-prog"/>
+        </svg>
+        <div class="profile-avatar-big" id="profile-avatar-big">
+          <span id="profile-avatar-letter2">?</span>
+        </div>
+      </div>
+      <h2 class="profile-name" id="profile-name">Игрок</h2>
+      <p class="profile-rank" id="profile-rank">🃏 Новичок</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value" id="stat-coins">1000</div>
+        <div class="stat-label">Фишек</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value" id="stat-wins">0</div>
+        <div class="stat-label">Побед</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎮</div>
+        <div class="stat-value" id="stat-games">0</div>
+        <div class="stat-label">Игр</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value" id="stat-winrate">0%</div>
+        <div class="stat-label">Винрейт</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value" id="stat-streak">0</div>
+        <div class="stat-label">Серия</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💎</div>
+        <div class="stat-value" id="stat-best">0</div>
+        <div class="stat-label">Макс выигрыш</div>
+      </div>
+    </div>
+    <div class="achievements">
+      <h3>Достижения</h3>
+      <div class="ach-list" id="ach-list">
+        <div class="ach-item locked"><span class="ach-icon">🎯</span><span>Первая победа</span></div>
+        <div class="ach-item locked"><span class="ach-icon">⚡</span><span>5 побед подряд</span></div>
+        <div class="ach-item locked"><span class="ach-icon">💰</span><span>Накопить 5000 фишек</span></div>
+        <div class="ach-item locked"><span class="ach-icon">🃏</span><span>Блэкджек!</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SETTINGS ══════════ -->
+<div id="screen-settings" class="screen hidden">
+  <div class="screen-header">
+    <button class="back-btn" onclick="openScreen('menu')">← Назад</button>
+    <h2>Настройки</h2>
+  </div>
+  <div class="settings-content">
+    <div class="settings-section">
+      <h3><span class="section-icon">👤</span> Профиль</h3>
+      <div class="setting-row">
+        <label>Никнейм</label>
+        <div class="nick-edit">
+          <input type="text" id="nick-input" placeholder="Введи ник" maxlength="16" />
+          <button class="save-nick-btn" onclick="saveNickname()">✓</button>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3><span class="section-icon">🔊</span> Звук</h3>
+      <div class="setting-row">
+        <label>Громкость</label>
+        <div class="slider-wrap">
+          <span class="vol-icon">🔇</span>
+          <input type="range" id="volume-slider" min="0" max="100" value="70" oninput="updateVolume(this.value)" />
+          <span class="vol-icon">🔊</span>
+          <span class="vol-val" id="vol-val">70%</span>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label>Звуки карт</label>
+        <div class="toggle-wrap">
+          <input type="checkbox" id="toggle-cards" checked class="toggle" onchange="toggleSetting('cards', this.checked)" />
+          <label for="toggle-cards" class="toggle-label"></label>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label>Музыка</label>
+        <div class="toggle-wrap">
+          <input type="checkbox" id="toggle-music" class="toggle" onchange="toggleSetting('music', this.checked)" />
+          <label for="toggle-music" class="toggle-label"></label>
+        </div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <h3><span class="section-icon">🎨</span> Оформление стола</h3>
+      <div class="setting-row bg-row">
+        <div class="bg-options">
+          <div class="bg-opt active" data-bg="classic" onclick="selectBg(this,'classic')">
+            <div class="bg-preview bg-classic"></div>
+            <span>Классик</span>
+          </div>
+          <div class="bg-opt" data-bg="midnight" onclick="selectBg(this,'midnight')">
+            <div class="bg-preview bg-midnight"></div>
+            <span>Полночь</span>
+          </div>
+          <div class="bg-opt" data-bg="royal" onclick="selectBg(this,'royal')">
+            <div class="bg-preview bg-royal"></div>
+            <span>Роял</span>
+          </div>
+          <div class="bg-opt" data-bg="neon" onclick="selectBg(this,'neon')">
+            <div class="bg-preview bg-neon"></div>
+            <span>Неон</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MATCHMAKING ══════════ -->
+<div id="screen-matchmaking" class="screen hidden">
+  <div class="screen-header">
+    <button class="back-btn" onclick="cancelMatchmaking()">✕ Отмена</button>
+    <h2>Поиск игры</h2>
+  </div>
+  <div class="matchmaking-content">
+    <div class="mm-table-visual">
+      <div class="mm-table-felt">
+        <div class="mm-table-label">BLACKJACK ROYAL</div>
+        <div class="mm-seats" id="mm-seats"></div>
+      </div>
+    </div>
+    <div class="mm-info-row">
+      <div class="mm-counter-badge">
+        <span id="mm-counter">1/6</span>
+        <small>игроков</small>
+      </div>
+      <p class="mm-status" id="mm-status">Ищем игроков...</p>
+    </div>
+    <div class="mm-countdown hidden" id="mm-countdown">
+      <div class="countdown-wrap">
+        <div class="countdown-ring">
+          <svg viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="44"/>
+            <circle class="ring-fill" id="ring-fill" cx="50" cy="50" r="44"/>
+          </svg>
+          <span id="countdown-num">15</span>
+        </div>
+        <p class="countdown-label">Игра начнётся через</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ GAME ══════════ -->
+<div id="screen-game" class="screen hidden">
+  <div class="game-table" id="game-table">
+
+    <!-- HUD top -->
+    <div class="game-hud">
+      <button class="hud-menu-btn" onclick="leaveGame()">⬅</button>
+      <div class="hud-coins">💰 <span id="hud-coins">1000</span></div>
+    </div>
+
+    <!-- Dealer zone -->
+    <div class="game-zone dealer-zone">
+      <div class="zone-label">🎩 Дилер</div>
+      <div class="cards-row" id="dealer-cards"></div>
+      <div class="hand-score dealer-score" id="dealer-score">?</div>
+    </div>
+
+    <!-- Other players -->
+    <div class="other-players" id="other-players"></div>
+
+    <!-- Player zone -->
+    <div class="game-zone player-zone">
+      <div class="cards-row" id="player-cards"></div>
+      <div class="hand-score player-score" id="player-score">0</div>
+      <div class="player-name-tag" id="player-name-tag">Ты</div>
+    </div>
+
+    <!-- Bet panel -->
+    <div class="bet-panel" id="bet-panel">
+      <div class="bet-title">Сделайте ставку</div>
+      <div class="chips-row">
+        <button class="chip chip-5"   onclick="addBet(5)"><span>5</span></button>
+        <button class="chip chip-10"  onclick="addBet(10)"><span>10</span></button>
+        <button class="chip chip-25"  onclick="addBet(25)"><span>25</span></button>
+        <button class="chip chip-50"  onclick="addBet(50)"><span>50</span></button>
+        <button class="chip chip-100" onclick="addBet(100)"><span>100</span></button>
+      </div>
+      <div class="bet-display">
+        Ставка: <span id="current-bet">0</span> 💰
+        <button class="clear-bet-btn" onclick="clearBet()">✕</button>
+      </div>
+      <button class="deal-btn" id="deal-btn" onclick="startRound()">
+        <span>Раздать карты 🃏</span>
+        <div class="deal-btn-shine"></div>
+      </button>
+    </div>
+
+    <!-- Actions panel -->
+    <div class="action-panel hidden" id="action-panel">
+      <div class="action-info">
+        <span>Ставка: <b id="action-bet">0</b> 💰</span>
+        <span>Баланс: <b id="action-balance">0</b> 💰</span>
+      </div>
+      <div class="action-buttons">
+        <button class="action-btn btn-hit"    onclick="playerHit()">Ещё 🃏</button>
+        <button class="action-btn btn-stand"  onclick="playerStand()">Стоп ✋</button>
+        <button class="action-btn btn-double" onclick="playerDouble()" id="btn-double">×2 💎</button>
+      </div>
+    </div>
+
+    <!-- Result overlay -->
+    <div class="result-overlay hidden" id="result-overlay">
+      <div class="result-card">
+        <div class="result-particles" id="result-particles"></div>
+        <div class="result-emoji" id="result-emoji">🏆</div>
+        <h2 id="result-title">Победа!</h2>
+        <p id="result-desc">+100 фишек</p>
+        <div class="result-scores" id="result-scores"></div>
+        <div class="result-btns">
+          <button class="result-btn primary" onclick="playAgain()">Ещё раз</button>
+          <button class="result-btn secondary" onclick="openScreen('menu')">Меню</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ TOAST ══════════ -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="js/sound.js"></script>
+<script src="js/game.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+// Fix btn-play binding after DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btn-play-main');
+  if (btn) btn.onclick = startMatchmaking_flow;
+});
+</script>
+</body>
+</html>
